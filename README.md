@@ -71,8 +71,6 @@ Executing the following line bello:
 will open the next window :
 
 ![The welcome title state](src/main/docs/images/screenshot-title.png "The welcome title state")
-![The options state](src/main/docs/images/screenshot-options.png "The Options state")
-![The play state](src/main/docs/images/screenshot-play.png "The Play state")
 
 
 ## Edit
