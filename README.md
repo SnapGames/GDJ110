@@ -1,10 +1,10 @@
-# GDJ107
+# GDJ110
 
-[![TravisCI](https://travis-ci.org/SnapGames/GDJ107.svg?branch=develop)](https://travis-ci.org/SnapGames/GDJ107 "open the TravisCI compilation trend") [![Dependency Status](https://www.versioneye.com/user/projects/59dd5fd72de28c2198ef86e9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59dd5fd72de28c2198ef86e9 "Open on VersionEye")
+[![TravisCI](https://travis-ci.org/SnapGames/GDJ110.svg?branch=develop)](https://travis-ci.org/SnapGames/GDJ110 "open the TravisCI compilation trend") [![Dependency Status](https://www.versioneye.com/user/projects/59dd5fd72de28c2198ef86e9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59dd5fd72de28c2198ef86e9 "Open on VersionEye")
 
-## Game Development Java Basics 107
+## Game Development Java Basics 110
 
-This project is part of the [GDJ107](https://classroom.google.com/c/NzI2ODQ3NjU2MFpa/t/NzI2Nzg0MjgxNFpa) course from [GameDev Basics
+This project is part of the [GDJ100](https://classroom.google.com/c/NzI2ODQ3NjU2MFpa/t/NzI2Nzg0MjgxNFpa) course from [GameDev Basics
 Java](https://classroom.google.com/c/NzI2ODQ3NjU2MFpa "Open the official on-line course") 
 provided by the [SnapGames](http://snapgames.fr) site. 
 
@@ -33,7 +33,7 @@ to execute the compiled jar, please execute the command bellow :
 or :
 
 ```bash
-    $> java -jar GDJ107-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+    $> java -jar GDJ110-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 - **Specifically to Windows platform**
@@ -44,12 +44,12 @@ To build a windows executable file, you must run :
     C:\> mvn clean install site
 ```
 
-This will build a `GDJ107.exe` into the `target` directory.
+This will build a `GDJ110.exe` into the `target` directory.
 
 Then you can directly execute :
 
 ```bat
-    C:\> target/GDJ107.exe
+    C:\> target/GDJ110.exe
 ```
 
 If needed, you can also add some arguments from the bellow table:
@@ -65,7 +65,7 @@ If needed, you can also add some arguments from the bellow table:
 Executing the following line bello:
 
 ```bat
-    C:/> target/GDJ107.exe -d 1
+    C:/> target/GDJ110.exe -d 1
 ```
 
 will open the next window :
@@ -107,6 +107,6 @@ Before execution, be sure that your `settings.xml` contains a `server` entry wit
 
 Have Fun !
 
-Send a mail to [SnapGames](mailto:contact@snapgames.fr?subject=GDJ107 "send a mail to your tutor")
+Send a mail to [SnapGames](mailto:contact@snapgames.fr?subject=GDJ110 "send a mail to your tutor")
 
 
