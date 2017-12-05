@@ -1,0 +1,330 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.snapgames.gdj</groupId>
+	<artifactId>GDJ110</artifactId>
+	<version>0.0.7-SNAPSHOT</version>
+	<name>GDJ110</name>
+	<description>Provide a basic Particle System to build Special Effect (rain, wind, snow, etc..)</description>
+	<url>https://github.com/SnapGames/GDJ110</url>
+	<inceptionYear>2017</inceptionYear>
+
+	<!-- Authors and Designers -->
+	<contributors>
+		<contributor>
+			<name>Frédéric Delorme</name>
+			<email>frederic.delorme@snapgames.fr</email>
+			<organization>SnapGames</organization>
+			<organizationUrl>http://snapgames.fr</organizationUrl>
+			<timezone>Europe/Paris</timezone>
+			<roles>
+				<role>GameDev utopist</role>
+			</roles>
+		</contributor>
+	</contributors>
+
+	<!-- Project eco-system definition -->
+	<organization>
+		<url>http://snapgames.github.io</url>
+		<name>SnapGames</name>
+	</organization>
+	<scm>
+		<url>https://github.com/SnapGames/GDJ110</url>
+		<connection>scm:git:https://github.com/SnapGames/GDJ110.git</connection>
+		<developerConnection>scm:git:https://github.com/SnapGames/GDJ110.git</developerConnection>
+		<tag>${project.version}</tag>
+	</scm>
+	<issueManagement>
+		<system>Github issues</system>
+		<url>https://github.com/SnapGames/GDJ110/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<url>https://travis-ci.org/SnapGames/GDJ110</url>
+		<system>Travis-CI</system>
+	</ciManagement>
+
+	<properties>
+		<mainClass>com.snapgames.gdj.core.Game</mainClass>
+		<!-- github server corresponds to entry in ~/.m2/settings.xml -->
+		<github.global.server>github</github.global.server>
+	</properties>
+
+
+	<!-- Project Dependencies -->
+	<dependencies>
+		<!-- JSON parsing -->
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/log4j-over-slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.4</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<!-- http://maven.apache.org/plugins/maven-compiler-plugin/ -->
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- Build the minimalist JAR without dependencies (Normal Edition) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${mainClass}</mainClass>
+						</manifest>
+					</archive>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- Package a jar with Sources -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<enconding>utf-8</enconding>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Prepare Javadoc with a specific Markdown docklet -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<enconding>utf-8</enconding>
+					<stylesheet>maven</stylesheet>
+					<overview>${project.basedir}/README.md</overview>
+					<doclet>ch.raffael.doclets.pegdown.PegdownDoclet</doclet>
+					<docletArtifact>
+						<groupId>ch.raffael.pegdown-doclet</groupId>
+						<artifactId>pegdown-doclet</artifactId>
+						<version>1.1</version>
+					</docletArtifact>
+					<useStandardDocletOptions>true</useStandardDocletOptions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Package a One full of dependencies JAR (Buffed Edition) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<encoding>utf-8</encoding>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${mainClass}</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-my-jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- run class from maven -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>${mainClass}</mainClass>
+					<arguments>
+						<!-- to be soon interpreted by a CLI impl. -->
+						<argument>-d true</argument>
+						<argument>-w 800x300</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+
+			<!-- Build executable from jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<!-- put your configurations here -->
+					<shadedArtifactAttached>true</shadedArtifactAttached>
+					<shadedClassifierName>shaded</shadedClassifierName>
+					<transformers>
+						<transformer
+							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+							<mainClass>${mainClass}</mainClass>
+						</transformer>
+						<transformer
+							implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>src/main/resources/res</resource>
+							<file>server.properties</file>
+						</transformer>
+					</transformers>
+					<!-- end of config -->
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- create a Windows EXE -->
+			<!-- https://github.com/lukaszlenart/launch4j-maven-plugin/blob/master/src/main/resources/README.adoc -->
+			<!-- see http://launch4j.sourceforge.net/ -->
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>1.7.21</version>
+				<executions>
+					<execution>
+						<id>l4j-clui</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+							<headerType>gui</headerType>
+							<jar>${project.build.directory}/${artifactId}-${version}-shaded.jar</jar>
+							<outfile>${project.build.directory}/${project.name}.exe</outfile>
+							<downloadUrl>http://java.com/download</downloadUrl>
+							<classPath>
+								<mainClass>${mainClass}</mainClass>
+								<preCp>anything</preCp>
+							</classPath>
+							<icon>src/main/resources/res/gdj-application.ico</icon>
+							<jre>
+								<minVersion>1.8.0</minVersion>
+								<jdkPreference>preferJre</jdkPreference>
+							</jre>
+							<versionInfo>
+								<fileVersion>1.0.0.0</fileVersion>
+								<txtFileVersion>${project.version}</txtFileVersion>
+								<fileDescription>${project.name}</fileDescription>
+								<copyright>${project.inceptionYear} ${project.organization.name}</copyright>
+								<productVersion>1.0.0.0</productVersion>
+								<txtProductVersion>1.0.0.0</txtProductVersion>
+								<productName>${project.name}</productName>
+								<companyName>${project.organization.name}</companyName>
+								<internalName>${project.name}</internalName>
+								<originalFilename>${project.name}.exe</originalFilename>
+							</versionInfo>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Publish artifacts to a specific repo-path to provide a temporary Maven repository.-->
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+				<configuration>
+					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+				</configuration>
+			</plugin>
+
+			<!-- Publish repo-path to a specific branch on github to provide a temporary Maven repository.-->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+					<branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>GDJ106</repositoryName>      <!-- github repo name -->
+					<repositoryOwner>snapgames</repositoryOwner>    <!-- github username -->
+				</configuration>
+				<executions>
+					<!-- run site-maven-plugin's 'site' target as part of the build's normal 
+						'deploy' phase -->
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+
+		</plugins>
+
+	</build>
+	<distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Temporary Staging Repository</name>
+			<url>file://${project.build.directory}/mvn-repo</url>
+		</repository>
+	</distributionManagement>
+
+
+</project>

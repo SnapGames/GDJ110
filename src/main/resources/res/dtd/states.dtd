@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT game (default*, states*)>
+<!ELEMENT states (state+)>
+<!ELEMENT default EMPTY>
+<!ELEMENT state EMPTY>
+<!ATTLIST state name (CDATA) #REQUIRED class (CDATA) #REQUIRED attributes (CDATA) #IMPLIED >
+<!ATTLIST default name (CDATA) #REQUIRED >

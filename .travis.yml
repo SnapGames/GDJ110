@@ -1,0 +1,10 @@
+#
+# SnapGames 2017
+# GDJ 101
+#
+language: java
+jdk:
+  - oraclejdk8
+
+#before_install:
+#  - Commands toi execute before install
