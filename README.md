@@ -10,7 +10,8 @@ provided by the [SnapGames](http://snapgames.fr) site.
 
 ### Goal
 
-> TODO
+Propose an intepretation of the famous ParticleSystem game engine pattern to add special effects capabilities to the core.
+This will implement Rain effect.
 
 ## Compile
 
