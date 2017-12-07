@@ -31,7 +31,7 @@ import com.snapgames.gdj.core.entity.Direction;
 import com.snapgames.gdj.core.entity.GameObject;
 import com.snapgames.gdj.core.entity.Layer;
 import com.snapgames.gdj.core.entity.particles.ParticleSystem;
-import com.snapgames.gdj.core.entity.particles.behaviors.RainBehavior;
+import com.snapgames.gdj.core.entity.particles.effects.rain.RainBehavior;
 import com.snapgames.gdj.core.gfx.RenderHelper;
 import com.snapgames.gdj.core.io.InputHandler;
 import com.snapgames.gdj.core.state.AbstractGameState;
@@ -65,6 +65,9 @@ public class PlayState extends AbstractGameState implements GameState {
 	// Object moved by player
 	private TextObject scoreTextObject = null;
 
+	// Rain effect
+	ParticleSystem rain;
+	
 	int dEnergy = 1;
 	private GaugeObject energy;
 	int dMana = 1;
@@ -125,9 +128,10 @@ public class PlayState extends AbstractGameState implements GameState {
 		this.playZone = new Rectangle(0, 0, 1000, 1000);
 
 		// Activate Layers
-		layers = new Layer[5];
+		layers = new Layer[6];
 		resetLayers();
 		layers[0].moveWithCamera = false;
+		layers[5].moveWithCamera = false;
 
 		// prepare Game objects
 
@@ -148,16 +152,17 @@ public class PlayState extends AbstractGameState implements GameState {
 		addCamera(camera);
 
 		// Add a Rain particle generator.
-		ParticleSystem rain = (ParticleSystem) new ParticleSystem("rainyParticles")
-				.addBehavior(new RainBehavior(0.20f)
-						.setRainChance(0.91f)
-						.setDropDiameter(2)
-						.setDropInitialVelocity(16)
-						.setGravity(-9.81f)
-						.setWind((float) (Math.random() * -1.0f) + 2.0f))
+		rain = (ParticleSystem) new ParticleSystem("rainyParticles")
+				.addBehavior(
+						new RainBehavior(0.20f)
+							.setRainChance(0.91f)
+							.setDropDiameter(2)
+							.setDropInitialVelocity(16)
+							.setGravity(-9.81f)
+							.setWind((float) (Math.random() * -1.0f) + 2.0f))
 				.setCamera(camera)
 				.setNbParticles(100)
-				.setLayer(3);
+				.setLayer(5);
 		addObject(rain);
 
 		// NPC

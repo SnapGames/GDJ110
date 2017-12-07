@@ -71,7 +71,7 @@ Executing the following line bello:
 
 will open the next window :
 
-![The welcome title state](src/main/docs/images/screenshot-title.png "The welcome title state")
+![The welcome title state](src/main/docs/images/screenshot-title.jpg "The welcome title state")
 
 
 ## Edit
