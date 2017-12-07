@@ -107,5 +107,3 @@ Before execution, be sure that your `settings.xml` contains a `server` entry wit
 Have Fun !
 
 Send a mail to [SnapGames](mailto:contact@snapgames.fr?subject=GDJ110 "send a mail to your tutor")
-
-
