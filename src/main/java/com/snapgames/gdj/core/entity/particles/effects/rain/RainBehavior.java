@@ -69,28 +69,7 @@ public class RainBehavior implements ParticleBehavior {
 	@Override
 	public Particle update(ParticleSystem ps, Particle p, float dt) {
 		if (p != null) {
-			switch (p.getClass().getName()) {
-			/**
-			 * Compute update for Rain particle.
-			 */
-			case "Rain":
-				Rain r = (Rain) p;
-				if (r.life > 0) {
-					r.update(ps, dt);
-				} else {
-					r.life -= 1;
-				}
-				break;
-			/**
-			 * Compute update for Drop particle.
-			 */
-			case "Drop":
-				Drop drop = (Drop) p;
-				drop.update(ps, dt);
-				break;
-			default:
-				break;
-			}
+			p.update(ps, dt);
 		}
 		return p;
 	}

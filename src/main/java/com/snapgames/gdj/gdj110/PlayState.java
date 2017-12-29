@@ -162,7 +162,8 @@ public class PlayState extends AbstractGameState implements GameState {
 							.setWind((float) (Math.random() * -1.0f) + 2.0f))
 				.setCamera(camera)
 				.setNbParticles(100)
-				.setLayer(5);
+				.setLayer(1)
+				.setPriority(100);
 		addObject(rain);
 
 		// NPC

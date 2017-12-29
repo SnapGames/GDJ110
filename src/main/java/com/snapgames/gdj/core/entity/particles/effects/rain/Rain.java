@@ -29,6 +29,13 @@ public class Rain extends AbstractParticle {
 	float prevY = 0;
 
 	public Rain(ParticleSystem ps) {
+		initialize(ps);
+	}
+
+	/**
+	 * @param ps
+	 */
+	public void initialize(ParticleSystem ps) {
 		Random r = new Random();
 		this.x = r.nextInt((int) (ps.camera.width + ps.camera.y));
 		this.y = 0;
@@ -43,18 +50,22 @@ public class Rain extends AbstractParticle {
 	@Override
 	public void update(ParticleSystem ps, float time) {
 		RainBehavior rb = (RainBehavior) ps.getBehavior();
-		prevX = x;
-		prevY = y;
+		if (life > 0) {
 
-		x += rb.mWind;
-		y += rb.mGravity;
+			prevX = x;
+			prevY = y;
 
-		if (y > ps.camera.height) {
-			life = 0;
-			ps.systemParticles.add(new Drop(ps, x, ps.camera.height + ps.camera.y));
+			x += rb.mWind+sx;
+			y -= (rb.mGravity*0.01f)+sy;
+
+			if (y > ps.camera.height+ps.camera.y) {
+				life = 0;
+				// on crée des drops
+				ps.systemParticles.add(new Drop(ps, x, ps.camera.height + ps.camera.y));
+				ps.systemParticles.add(new Rain(ps));
+			}
+			life -= 1;
 		}
-
-	
 	}
 
 	@Override

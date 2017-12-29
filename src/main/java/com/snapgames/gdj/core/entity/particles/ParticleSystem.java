@@ -12,9 +12,9 @@ package com.snapgames.gdj.core.entity.particles;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,7 @@ public class ParticleSystem extends AbstractGameObject {
 	 * Particles linked to this system.
 	 */
 	public List<Particle> systemParticles = new ArrayList<>();
+	private List<Particle> toBeRemoved = new ArrayList<>();
 
 	/**
 	 * Behavior to be applied to all particles.
@@ -68,7 +69,6 @@ public class ParticleSystem extends AbstractGameObject {
 	 */
 	public void initialize() {
 		for (int i = 0; i < systemParticles.size(); i++) {
-
 			Particle part = behavior.create(this);
 			part.initialize(this);
 			if (part.getLife() > 0) {
@@ -110,7 +110,7 @@ public class ParticleSystem extends AbstractGameObject {
 	 * @return
 	 */
 	public ParticleSystem addBehavior(ParticleBehavior b) {
-		logger.debug("Add beahavior {}", b.getClass().getName());
+		logger.info("Add beahavior {}", b.getClass().getName());
 		this.behavior = b;
 		return this;
 	}
@@ -124,15 +124,19 @@ public class ParticleSystem extends AbstractGameObject {
 	 */
 	@Override
 	public void update(Game game, long dt) {
-		Iterator<Particle> i = systemParticles.iterator();
-		while (i.hasNext()) {
-			Particle particle = i.next();
+		super.update(game, dt);
+		purgeParticles();
+		for (Particle particle : systemParticles) {
 			behavior.update(this, particle, dt);
-			if (particle.getLife() == 0) {
-				i.remove();
-			}
 		}
 		behavior.create(this);
+	}
+
+	private void purgeParticles() {
+		if (toBeRemoved.size() > 0) {
+			systemParticles = systemParticles.stream().filter(p -> p.getLife() <= 0).collect(Collectors.toList());
+			System.out.println(systemParticles.size());
+		}
 	}
 
 	/*
