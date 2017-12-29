@@ -5,6 +5,6 @@
 	<states>
 		<state name="title" class="com.snapgames.gdj.gdj107.TitleState" />
 		<state name="options" class="com.snapgames.gdj.gdj107.OptionsState" />
-		<state name="play" class="com.snapgames.gdj.gdj107.PlayState" />
+		<state name="play" class="com.snapgames.gdj.gdj110.PlayState" />
 	</states>
 </game>

@@ -1,6 +1,8 @@
 # GDJ110
 
-[![TravisCI](https://travis-ci.org/SnapGames/GDJ110.svg?branch=develop)](https://travis-ci.org/SnapGames/GDJ110 "open the TravisCI compilation trend") [![Dependency Status](https://www.versioneye.com/user/projects/5a2904e20fb24f78efd928d9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a2904e20fb24f78efd928d9 "Open on VersionEye")
+[![Dependency Status](https://www.versioneye.com/user/projects/59dd5fd72de28c2198ef86e9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59dd5fd72de28c2198ef86e9 "Open on VersionEye")
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/quile1x0i77lbwod?svg=true)](https://ci.appveyor.com/project/mcgivrer/gdj110 "Open the AppVeyor project page") 
+[![TravisCI](https://travis-ci.org/SnapGames/GDJ110.svg?branch=develop)](https://travis-ci.org/SnapGames/GDJ110 "open the TravisCI compilation trend") 
 
 ## Game Development Java Basics 110
 
@@ -10,7 +12,8 @@ provided by the [SnapGames](http://snapgames.fr) site.
 
 ### Goal
 
-> TODO
+Propose an intepretation of the famous ParticleSystem game engine pattern to add special effects capabilities to the core.
+This will implement Rain effect.
 
 ## Compile
 
@@ -70,7 +73,7 @@ Executing the following line bello:
 
 will open the next window :
 
-![The welcome title state](src/main/docs/images/screenshot-title.png "The welcome title state")
+![The welcome title state](src/main/docs/images/screenshot-title.jpg "The welcome title state")
 
 
 ## Edit
@@ -82,6 +85,10 @@ Import this project as an Existing Maven Project into your prefered IDE,
 ## Some screen shots ?
 
 ### States
+
+#### PlayState
+
+This screenshot/gif will demonstrate how animated Rain effect is.
 
 > TODO
 
@@ -106,5 +113,3 @@ Before execution, be sure that your `settings.xml` contains a `server` entry wit
 Have Fun !
 
 Send a mail to [SnapGames](mailto:contact@snapgames.fr?subject=GDJ110 "send a mail to your tutor")
-
-

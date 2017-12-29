@@ -48,6 +48,7 @@ public class AbstractParticle implements Particle {
 	protected AbstractParticle() {
 		x = y = 0.0f;
 		sx = sy = 0.0f;
+		life=100;
 	}
 
 	/*
