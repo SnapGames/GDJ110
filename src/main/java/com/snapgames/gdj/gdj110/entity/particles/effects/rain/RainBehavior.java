@@ -48,7 +48,7 @@ public class RainBehavior implements ParticleBehavior {
 	@Override
 	public Particle create(ParticleSystem ps) {
 		Rain p = (Rain) ps.getNextFreeParticle(Rain.class);
-		if(p==null) {
+		if (p != null) {
 			if (Math.random() < rainChance) {
 				p.life = 100;
 			} else {

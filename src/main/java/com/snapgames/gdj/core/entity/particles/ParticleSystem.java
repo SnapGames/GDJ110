@@ -10,6 +10,8 @@
 package com.snapgames.gdj.core.entity.particles;
 
 import java.awt.Graphics2D;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -131,8 +133,10 @@ public class ParticleSystem extends AbstractGameObject {
 	public void update(Game game, long dt) {
 		super.update(game, dt);
 		purgeParticles();
-		for (Particle particle : systemParticles) {
-			behavior.update(this, particle, dt);
+		for (int i = 0; i < systemParticles.size(); i++) {
+			Particle particle = systemParticles.get(i);
+			particle = behavior.update(this, particle, dt);
+			systemParticles.set(i, particle);
 		}
 		behavior.create(this);
 	}
@@ -172,6 +176,7 @@ public class ParticleSystem extends AbstractGameObject {
 
 	/**
 	 * Add a prticle to the system.
+	 * 
 	 * @param p
 	 */
 	public void addParticle(Particle p) {
@@ -185,14 +190,36 @@ public class ParticleSystem extends AbstractGameObject {
 	}
 
 	public Particle getNextFreeParticle(Class<?> clazz) {
+		int cursor = 0;
 		Particle p = null;
 		if (!systemParticles.isEmpty()) {
-			for (int i = 0; i < systemParticles.size(); i++) {
-				if(p.getClass().equals(clazz)
-						&&systemParticles.get(i) != null 
-						&& systemParticles.get(i).getLife() <= 0) {
-					p = systemParticles.get(i);
+			while (cursor < systemParticles.size()) {
+				p = systemParticles.get(cursor);
+				if (p != null && p.getClass().equals(clazz) && systemParticles.get(cursor).getLife() <= 0) {
+					System.out.println(String.format("reuse particle %d", cursor));
+				} else {
+					try {
+						Constructor<?> c = clazz.getDeclaredConstructor(new Class[] { ParticleSystem.class });
+						p = (Particle) c.newInstance(this);
+						p.initialize(this);
+						systemParticles.set(cursor, p);
+						System.out.println(String.format("instanciate a new particle %s", clazz.getName()));
+					} catch (InstantiationException | IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+					} catch (SecurityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				cursor++;
 			}
 		}
 		return p;

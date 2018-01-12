@@ -54,7 +54,7 @@ public class Rain extends AbstractParticle {
 		prevY = y;
 
 		x += rb.mWind + sx;
-		y -= (rb.mGravity) + sy;
+		y -= (rb.mGravity*0.1f) + sy;
 
 	}
 
