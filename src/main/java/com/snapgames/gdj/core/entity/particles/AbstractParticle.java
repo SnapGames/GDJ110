@@ -48,7 +48,7 @@ public class AbstractParticle implements Particle {
 	protected AbstractParticle() {
 		x = y = 0.0f;
 		sx = sy = 0.0f;
-		life=100;
+		life = 100;
 	}
 
 	/*
@@ -116,4 +116,22 @@ public class AbstractParticle implements Particle {
 		return life;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("AbstractParticle [x=").append(x).append(", y=").append(y).append(", sx=").append(sx)
+				.append(", sy=").append(sy).append(", w=").append(w).append(", h=").append(h).append(", life=")
+				.append(life).append(", color=").append(color).append("]");
+		return builder.toString();
+	}
+
+	@Override
+	public void computeLife(int i) {
+		life += i;
+	}
 }

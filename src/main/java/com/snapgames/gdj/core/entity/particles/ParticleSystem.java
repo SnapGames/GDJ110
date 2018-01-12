@@ -37,6 +37,8 @@ public class ParticleSystem extends AbstractGameObject {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(ParticleSystem.class);
 
+	public int size = 0;
+
 	/**
 	 * Particles linked to this system.
 	 */
@@ -70,9 +72,11 @@ public class ParticleSystem extends AbstractGameObject {
 	public void initialize() {
 		for (int i = 0; i < systemParticles.size(); i++) {
 			Particle part = behavior.create(this);
-			part.initialize(this);
-			if (part.getLife() > 0) {
-				systemParticles.set(i, part);
+			if (part != null) {
+				part.initialize(this);
+				if (part.getLife() > 0) {
+					systemParticles.set(i, part);
+				}
 			}
 		}
 	}
@@ -85,6 +89,7 @@ public class ParticleSystem extends AbstractGameObject {
 	 * @return
 	 */
 	public ParticleSystem setNbParticles(int size) {
+		this.size = size;
 		systemParticles = Arrays.asList(new Particle[size]);
 		initialize();
 		logger.debug("set particles number to {}", size);
@@ -151,7 +156,6 @@ public class ParticleSystem extends AbstractGameObject {
 		for (Particle particle : systemParticles) {
 			behavior.render(this, particle, g);
 		}
-
 	}
 
 	/**
@@ -164,6 +168,34 @@ public class ParticleSystem extends AbstractGameObject {
 		this.camera = camera;
 		logger.debug("Set camera to {}", camera.name);
 		return this;
+	}
+
+	/**
+	 * Add a prticle to the system.
+	 * @param p
+	 */
+	public void addParticle(Particle p) {
+		if (!systemParticles.isEmpty()) {
+			for (int i = 0; i < systemParticles.size(); i++) {
+				if (systemParticles.get(i) != null && systemParticles.get(i).getLife() <= 0) {
+					systemParticles.set(i, p);
+				}
+			}
+		}
+	}
+
+	public Particle getNextFreeParticle(Class<?> clazz) {
+		Particle p = null;
+		if (!systemParticles.isEmpty()) {
+			for (int i = 0; i < systemParticles.size(); i++) {
+				if(p.getClass().equals(clazz)
+						&&systemParticles.get(i) != null 
+						&& systemParticles.get(i).getLife() <= 0) {
+					p = systemParticles.get(i);
+				}
+			}
+		}
+		return p;
 	}
 
 	/**

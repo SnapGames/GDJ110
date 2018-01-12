@@ -56,4 +56,18 @@ public interface Particle {
 	 */
 	public int getLife();
 
+	/**
+	 * Translate attributes of the Particle to a String, manly for debug purpose.
+	 * 
+	 * @return
+	 */
+	public String toString();
+
+	/**
+	 * Compute life for Particle.
+	 * 
+	 * @param i
+	 */
+	public void computeLife(int i);
+
 }

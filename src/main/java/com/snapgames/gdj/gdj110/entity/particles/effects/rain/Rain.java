@@ -7,7 +7,7 @@
  * 
  * @year 2017
  */
-package com.snapgames.gdj.core.entity.particles.effects.rain;
+package com.snapgames.gdj.gdj110.entity.particles.effects.rain;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -50,22 +50,12 @@ public class Rain extends AbstractParticle {
 	@Override
 	public void update(ParticleSystem ps, float time) {
 		RainBehavior rb = (RainBehavior) ps.getBehavior();
-		if (life > 0) {
+		prevX = x;
+		prevY = y;
 
-			prevX = x;
-			prevY = y;
+		x += rb.mWind + sx;
+		y -= (rb.mGravity) + sy;
 
-			x += rb.mWind+sx;
-			y -= (rb.mGravity*0.01f)+sy;
-
-			if (y > ps.camera.height+ps.camera.y) {
-				life = 0;
-				// on crée des drops
-				ps.systemParticles.add(new Drop(ps, x, ps.camera.height + ps.camera.y));
-				ps.systemParticles.add(new Rain(ps));
-			}
-			life -= 1;
-		}
 	}
 
 	@Override
@@ -74,4 +64,6 @@ public class Rain extends AbstractParticle {
 		Line2D line = new Line2D.Double(x, y, prevX, prevY);
 		g.draw(line);
 	}
+	
+	
 }
