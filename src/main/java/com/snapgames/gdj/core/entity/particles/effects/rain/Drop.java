@@ -43,6 +43,7 @@ public class Drop extends AbstractParticle {
 		this.color = Color.WHITE;
 		v0 = rb.dropInitialVelocity;
 		angle = (float) Math.toRadians(Math.round(Math.random() * 180)); // from 0 - 180 degrees
+		this.life=30;
 
 	}
 

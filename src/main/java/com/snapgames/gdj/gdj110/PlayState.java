@@ -155,14 +155,14 @@ public class PlayState extends AbstractGameState implements GameState {
 		rain = (ParticleSystem) new ParticleSystem("rainyParticles")
 				.addBehavior(
 						new RainBehavior(0.20f)
-							.setRainChance(0.91f)
+							.setRainChance(0.1f)
 							.setDropDiameter(2)
 							.setDropInitialVelocity(16)
-							.setGravity(-9.81f)
-							.setWind((float) (Math.random() * -1.0f) + 2.0f))
+							.setGravity(-0.981f*3)
+							.setWind((float) (Math.random() * -0.5f) + 0.5f))
 				.setCamera(camera)
 				.setNbParticles(100)
-				.setLayer(1)
+				.setLayer(3)
 				.setPriority(100);
 		addObject(rain);
 

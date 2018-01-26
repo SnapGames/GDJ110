@@ -25,6 +25,8 @@ import com.snapgames.gdj.core.entity.particles.ParticleSystem;
  */
 public class Rain extends AbstractParticle {
 
+	public static int initLife=50;
+	
 	float prevX = 0;
 	float prevY = 0;
 
@@ -37,9 +39,14 @@ public class Rain extends AbstractParticle {
 	 */
 	public void initialize(ParticleSystem ps) {
 		Random r = new Random();
-		this.x = r.nextInt((int) (ps.camera.width + ps.camera.y));
-		this.y = 0;
+		//this.x = r.nextInt((int) (ps.camera.width + ps.camera.x));
+		//this.y = r.nextInt((int) (ps.camera.height + ps.camera.y));
+		this.x = r.nextInt((int) (ps.camera.width));
+		this.y = r.nextInt((int) (ps.camera.height));
+		this.prevX=x;
+		this.prevY=y;
 		this.color = Color.GRAY;
+		this.life=initLife;
 	}
 
 	@Override
@@ -56,14 +63,8 @@ public class Rain extends AbstractParticle {
 			prevY = y;
 
 			x += rb.mWind+sx;
-			y -= (rb.mGravity*0.01f)+sy;
+			y -= (rb.mGravity)+sy;
 
-			if (y > ps.camera.height+ps.camera.y) {
-				life = 0;
-				// on crée des drops
-				ps.systemParticles.add(new Drop(ps, x, ps.camera.height + ps.camera.y));
-				ps.systemParticles.add(new Rain(ps));
-			}
 			life -= 1;
 		}
 	}

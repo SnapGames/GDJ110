@@ -37,6 +37,8 @@ public class ParticleSystem extends AbstractGameObject {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(ParticleSystem.class);
 
+	private static int nextFreeParticleIndex = 0;
+
 	/**
 	 * Particles linked to this system.
 	 */
@@ -64,6 +66,18 @@ public class ParticleSystem extends AbstractGameObject {
 		logger.debug("create particle system with particle's life set to 100");
 	}
 
+	public void addParticle(Particle p) {
+
+		this.systemParticles.set(nextFreeParticleIndex, p);
+		for (int i = 0; i < systemParticles.size(); i++) {
+			Particle ip = systemParticles.get(i);
+			if (ip == null || ip.getLife() == 0) {
+				nextFreeParticleIndex = i;
+				break;
+			}
+		}
+	}
+
 	/**
 	 * Initialize all particles.
 	 */
@@ -71,9 +85,7 @@ public class ParticleSystem extends AbstractGameObject {
 		for (int i = 0; i < systemParticles.size(); i++) {
 			Particle part = behavior.create(this);
 			part.initialize(this);
-			if (part.getLife() > 0) {
-				systemParticles.set(i, part);
-			}
+			addParticle(part);
 		}
 	}
 
