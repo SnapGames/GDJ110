@@ -58,7 +58,7 @@ public class Drop extends AbstractParticle {
 		t += time;
 		x = x0 + v0 * t * (float) Math.cos(angle);
 		y = y0 - (v0 * t * (float) Math.sin(angle) - rb.mGravity * t * t / 2);
-		if (y >= ps.camera.height + ps.camera.y) {
+		if (y >= ps.trackedObject.getHeight() + ps.trackedObject.getY()) {
 			life = 0;
 		}
 		life -= 1;

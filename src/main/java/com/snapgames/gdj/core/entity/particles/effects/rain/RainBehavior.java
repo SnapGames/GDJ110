@@ -72,10 +72,10 @@ public class RainBehavior implements ParticleBehavior {
 			p.update(ps, dt);
 			if (p.getClass().equals(Rain.class)) {
 				Rain pr = (Rain) p;
-				if (pr.y > ps.camera.height + ps.camera.y) {
+				if (pr.y > ps.trackedObject.getHeight() + ps.trackedObject.getY()) {
 					pr.life = 0;
 					// on crée des drops
-					ps.addParticle(new Drop(ps, pr.x, ps.camera.height + ps.camera.y));
+					ps.addParticle(new Drop(ps, pr.x, ps.trackedObject.getHeight() + ps.trackedObject.getHeight()));
 				}
 			}
 			ps.addParticle(new Rain(ps));

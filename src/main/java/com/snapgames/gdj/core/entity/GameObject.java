@@ -132,4 +132,11 @@ public interface GameObject extends Sizeable {
 	 *            the Graphics interface to render things.
 	 */
 	void drawSpecialDebugInfo(Game game, Graphics2D g);
+
+	/**
+	 * return the true if object must be render only if in field of view.
+	 * 
+	 * @return
+	 */
+	boolean isFieldOfView();
 }

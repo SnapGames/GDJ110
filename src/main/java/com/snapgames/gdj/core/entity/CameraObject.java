@@ -41,7 +41,7 @@ public class CameraObject extends AbstractGameObject {
 
 	/**
 	 * Initialize the Camera object with a <code>name</code>, a <code>target</code>
-	 * to follow and a <code>tween</code> factor to compute camera reaction speed.
+	 * to follow and a <code>tween</code> factor to compute trackedObject reaction speed.
 	 * 
 	 * @param name
 	 * @param x
@@ -112,7 +112,7 @@ public class CameraObject extends AbstractGameObject {
 
 	/**
 	 * Camera debug info are drawn at the point with coordinates (0,0), because it's
-	 * all other objects that are moved according to camera position (see the method
+	 * all other objects that are moved according to trackedObject position (see the method
 	 * from the render of AbstractGameState object.
 	 * 
 	 * @see AbstractGameState#render(Game,Graphics2D)
@@ -173,7 +173,7 @@ public class CameraObject extends AbstractGameObject {
 	}
 
 	/**
-	 * Set the camera target to follow.
+	 * Set the trackedObject target to follow.
 	 * 
 	 * @param player
 	 * @return
@@ -185,7 +185,7 @@ public class CameraObject extends AbstractGameObject {
 	}
 
 	/**
-	 * Set the tween factor for the camera following delay to the target.
+	 * Set the tween factor for the trackedObject following delay to the target.
 	 * 
 	 * @param tween
 	 * @return

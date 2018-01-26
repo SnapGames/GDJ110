@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.snapgames.gdj.core.Game;
 import com.snapgames.gdj.core.entity.AbstractGameObject;
-import com.snapgames.gdj.core.entity.CameraObject;
+import com.snapgames.gdj.core.entity.GameObject;
 import com.snapgames.gdj.core.entity.particles.behaviors.ParticleBehavior;
 
 /**
@@ -53,7 +53,7 @@ public class ParticleSystem extends AbstractGameObject {
 	/**
 	 * Camera to set Particle Focus.
 	 */
-	public CameraObject camera;
+	public GameObject trackedObject;
 
 	/**
 	 * Default constructor to create a new Particle System.
@@ -167,14 +167,14 @@ public class ParticleSystem extends AbstractGameObject {
 	}
 
 	/**
-	 * define the camera the RainBehavior generator must be stick to.
+	 * define the trackedObject the RainBehavior generator must be stick to.
 	 * 
-	 * @param camera
+	 * @param trackedObject
 	 * @return
 	 */
-	public ParticleSystem setCamera(CameraObject camera) {
-		this.camera = camera;
-		logger.debug("Set camera to {}", camera.name);
+	public ParticleSystem setTrackedObject(GameObject object) {
+		this.trackedObject = object;
+		logger.debug("Set trackedObject to {}", object.getName());
 		return this;
 	}
 
