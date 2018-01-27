@@ -496,7 +496,7 @@ public class AbstractGameObject implements GameObject {
 	 * @param fov
 	 * @return
 	 */
-	public AbstractGameObject setFov(boolean fov) {
+	public AbstractGameObject setFixedFov(boolean fov) {
 		this.fov = fov;
 		return this;
 	}

@@ -7,7 +7,7 @@
  * 
  * @year 2017
  */
-package com.snapgames.gdj.core.entity.particles.effects.rain;
+package com.snapgames.gdj.gdj110.entity.particles.rain;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

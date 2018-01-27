@@ -31,7 +31,6 @@ import com.snapgames.gdj.core.entity.Direction;
 import com.snapgames.gdj.core.entity.GameObject;
 import com.snapgames.gdj.core.entity.Layer;
 import com.snapgames.gdj.core.entity.particles.ParticleSystem;
-import com.snapgames.gdj.core.entity.particles.effects.rain.RainBehavior;
 import com.snapgames.gdj.core.gfx.RenderHelper;
 import com.snapgames.gdj.core.io.InputHandler;
 import com.snapgames.gdj.core.state.AbstractGameState;
@@ -43,6 +42,7 @@ import com.snapgames.gdj.gdj107.entity.Enemy;
 import com.snapgames.gdj.gdj107.entity.GaugeObject;
 import com.snapgames.gdj.gdj107.entity.ItemContainerObject;
 import com.snapgames.gdj.gdj107.entity.Player;
+import com.snapgames.gdj.gdj110.entity.particles.rain.RainBehavior;
 
 /**
  * The Play State class defines default behavior for the playable game state.
@@ -62,9 +62,6 @@ public class PlayState extends AbstractGameState implements GameState {
 	// list of other entities to demonstrate AbstractGameObject usage.
 	private List<AbstractGameObject> entities = new CopyOnWriteArrayList<>();
 
-	
-	
-	
 	// Object moved by player
 	private TextObject scoreTextObject = null;
 
@@ -155,19 +152,18 @@ public class PlayState extends AbstractGameState implements GameState {
 
 		// Add a Rain particle generator.
 		rain = (ParticleSystem) new ParticleSystem("rainyParticles")
-				.addBehavior(
-					new RainBehavior(0.20f)
+				.addBehavior(new RainBehavior(0.20f)
 						.setRainChance(0.1f)
 						.setDropDiameter(2)
 						.setDropInitialVelocity(16)
 						.setGravity(-0.981f * 3)
 						.setWind((float) (Math.random() * -0.5f) + 0.5f))
-					.setTrackedObject(player)
-					.setNbParticles(100)
-					.setLayer(3)
-					.setPriority(100)
-					.setFov(false)
-					.setSize(game.bbox);
+				.setTrackedObject(player)
+				.setNbParticles(300)
+				.setLayer(3)
+				.setPriority(100)
+				.setFixedFov(false)
+				.setSize(game.bbox);
 		addObject(rain);
 
 		// NPC
@@ -619,6 +615,5 @@ public class PlayState extends AbstractGameState implements GameState {
 	private synchronized void addEntity(AbstractGameObject e) {
 		entities.add(e);
 	}
-	
-	
+
 }
