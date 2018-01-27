@@ -62,6 +62,9 @@ public class PlayState extends AbstractGameState implements GameState {
 	// list of other entities to demonstrate AbstractGameObject usage.
 	private List<AbstractGameObject> entities = new CopyOnWriteArrayList<>();
 
+	
+	
+	
 	// Object moved by player
 	private TextObject scoreTextObject = null;
 
@@ -586,7 +589,7 @@ public class PlayState extends AbstractGameState implements GameState {
 						.setVelocity(((float) Math.random() * 0.05f) - 0.02f, ((float) Math.random() * 0.05f) - 0.02f);
 
 			}
-			entities.add(entity);
+			addEntity(entity);
 			addObject(entity);
 		}
 
@@ -613,4 +616,9 @@ public class PlayState extends AbstractGameState implements GameState {
 		objects.removeAll(toBeDeleted);
 	}
 
+	private synchronized void addEntity(AbstractGameObject e) {
+		entities.add(e);
+	}
+	
+	
 }

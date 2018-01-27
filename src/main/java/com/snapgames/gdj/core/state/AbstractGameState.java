@@ -142,7 +142,7 @@ public abstract class AbstractGameState implements GameState {
 	 * 
 	 * @param object
 	 */
-	protected void addObject(AbstractGameObject object) {
+	protected synchronized void addObject(AbstractGameObject object) {
 		// add object to rendering list
 		objects.add(object);
 		objects.sort(new Comparator<GameObject>() {
@@ -159,7 +159,7 @@ public abstract class AbstractGameState implements GameState {
 		logger.debug("Add {} to the objects list", object.name);
 	}
 
-	private void addObjectToLayer(AbstractGameObject object) {
+	private synchronized void addObjectToLayer(AbstractGameObject object) {
 		if (object.layer >= 0 && layers[object.layer] != null) {
 
 			layers[object.layer].objects.add(object);
