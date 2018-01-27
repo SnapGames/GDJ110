@@ -9,6 +9,11 @@
  */
 package com.snapgames.gdj.core.ui.i18n;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -21,12 +26,32 @@ public class Messages {
 	/**
 	 * Path to the resource messages file
 	 */
-	private static final String BUNDLE_NAME = "res.messages"; //$NON-NLS-1$
+	private static String BUNDLE_NAME = "res.i18n.messages"; //$NON-NLS-1$
 
 	/**
 	 * Load bundle from path.
 	 */
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+
+	public static final ArrayList<Locale> LOCALES = new ArrayList<>();
+
+	static {
+		try {
+			File f = new File(Messages.class.getResource("/res/i18n").toURI());
+			final String bundle = "messages_";// Bundle name prefix.
+			for (String s : f.list(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.startsWith(bundle);
+				}
+			})) {
+				LOCALES.add(new Locale(s.substring(bundle.length(), s.indexOf('.'))));
+			}
+		} catch (URISyntaxException x) {
+			throw new RuntimeException(x);
+		}
+		LOCALES.trimToSize();
+	}
 
 	/**
 	 * private Constructor to not instantiate this class outside itself

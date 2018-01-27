@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,10 @@ public class OptionsState extends AbstractGameState {
 	 * item for Music
 	 */
 	MenuItem musicItemFlag;
+	/**
+	 * item for Locale
+	 */
+	MenuItem localeItemSelector;
 
 	/**
 	 * Screen title
@@ -67,6 +72,15 @@ public class OptionsState extends AbstractGameState {
 	 */
 	Boolean soundFlag = true;
 	Boolean musicFlag = true;
+
+	/**
+	 * Selected Locale for the game.
+	 */
+	String defaultLocaleSelected = "EN_en";
+
+	String localeSelected = Locale.getDefault().toString();
+
+	private int localeIndex;
 
 	/*
 	 * (non-Javadoc)
@@ -96,29 +110,23 @@ public class OptionsState extends AbstractGameState {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i] = new Layer(true, false);
 		}
+		
+		localeSelected = Messages.LOCALES.get(0).toString();
 
 		titleFont = game.getGraphics().getFont().deriveFont(3.0f * Game.SCREEN_FONT_RATIO);
 		optionFont = game.getGraphics().getFont().deriveFont(1.2f * Game.SCREEN_FONT_RATIO);
 
-		title = (TextObject) new TextObject("title")
-				.setText(Messages.getString("Options.title", "Title"))
-				.setTextAlign(TextPosition.CENTER)
-				.setFont(titleFont)
-				.setPosition(Game.WIDTH / 2, 10)
-				.setLayer(1)
-				.setPriority(1)
-				.setColor(Color.WHITE);
+		title = (TextObject) new TextObject("title").setText(Messages.getString("Options.title", "Title"))
+				.setTextAlign(TextPosition.CENTER).setFont(titleFont).setPosition(Game.WIDTH / 2, 10).setLayer(1)
+				.setPriority(1).setColor(Color.WHITE);
 		addObject(title);
 
-		menu = (MenuObject) new MenuObject("options")
-				.setActiveItem(0)
-				.setShadowColor(Color.BLACK)
-				.setAlignText(TextPosition.CENTER)
-				.setFont(optionFont)
-				.setPosition(Game.WIDTH / 2, Game.HEIGHT / 2)
+		menu = (MenuObject) new MenuObject("options").setActiveItem(0).setShadowColor(Color.BLACK)
+				.setAlignText(TextPosition.CENTER).setFont(optionFont).setPosition(Game.WIDTH / 2, Game.HEIGHT / 2)
 				.setColor(Color.WHITE);
 		soundItemFlag = menu.addItem("sound", "Options.items.sound", "Sound : %s", soundFlag);
 		musicItemFlag = menu.addItem("music", "Options.items.music", "music : %s", musicFlag);
+		localeItemSelector = menu.addItem("language", "Options.items.languages", "language : %s", Locale.getDefault().getDisplayLanguage());
 		menu.addItem("back", "Options.items.back", "Back");
 		menu.layer = 1;
 		menu.priority = 1;
@@ -135,9 +143,11 @@ public class OptionsState extends AbstractGameState {
 	 */
 	@Override
 	public void update(Game game, long dt) {
-		if (soundItemFlag != null && musicItemFlag != null) {
+		if (soundItemFlag != null && musicItemFlag != null && localeSelected!=null) {
 			soundItemFlag.setLabelArgs((soundFlag ? "ON" : "OFF"));
 			musicItemFlag.setLabelArgs((musicFlag ? "ON" : "OFF"));
+			Locale locale = Locale.getDefault()!=null?Locale.getDefault():Locale.ENGLISH;
+			localeItemSelector.setLabelArgs(locale.getDisplayLanguage());
 		}
 	}
 
@@ -173,6 +183,14 @@ public class OptionsState extends AbstractGameState {
 				musicFlag = !musicFlag;
 				GameOptions.set(GameOptions.OPTION_MUSIC_FLAG, musicFlag);
 				break;
+			case "language":
+				if(localeIndex+1 < Messages.LOCALES.size()) {
+					Locale.setDefault(Messages.LOCALES.get(localeIndex));
+					//Messages.setLocale(Messages.LOCALES.get(localeIndex));
+					localeIndex++;
+				}else {
+					localeIndex=0;
+				}
 			}
 		}
 	}

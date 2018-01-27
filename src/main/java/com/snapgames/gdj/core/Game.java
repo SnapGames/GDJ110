@@ -65,7 +65,7 @@ public class Game extends JPanel {
 	 */
 	public static float SCALE = 2.0f;
 
-	public static float SCREEN_FONT_RATIO = HEIGHT / 22;
+	public static float SCREEN_FONT_RATIO = HEIGHT / (WIDTH/14);
 
 	/**
 	 * Number of frame per seconds
