@@ -7,7 +7,7 @@
  * 
  * @year 2017
  */
-package com.snapgames.gdj.gdj110.entity.particles.effects.rain;
+package com.snapgames.gdj.core.entity.particles.effects.rain;
 
 import java.awt.Graphics2D;
 
@@ -47,13 +47,13 @@ public class RainBehavior implements ParticleBehavior {
 	 */
 	@Override
 	public Particle create(ParticleSystem ps) {
-		Rain p = (Rain) ps.getNextFreeParticle(Rain.class);
-		if (p != null) {
-			if (Math.random() < rainChance) {
-				p.life = 100;
-			} else {
-				p.life = 0;
-			}
+
+		Rain p = new Rain(ps);
+		// CREATE NEW RAIN
+		if (Math.random() <= rainChance) {
+			p.life = Rain.initLife;
+		} else {
+			p.life = 0;
 		}
 		return p;
 	}
@@ -69,20 +69,16 @@ public class RainBehavior implements ParticleBehavior {
 	@Override
 	public Particle update(ParticleSystem ps, Particle p, float dt) {
 		if (p != null) {
-			if (p.getLife() > 0) {
-				p.update(ps, dt);
-				if (p.getClass().equals(Rain.class)) {
-					Rain r = (Rain) p;
-					if (r.y > ps.camera.height + ps.camera.y) {
-						r.life = 0;
-						for (int i = 0; i < 3; i++) {
-							ps.addParticle(new Drop(ps, r.x, ps.camera.height + ps.camera.y));
-						}
-						ps.addParticle(create(ps));
-					}
+			p.update(ps, dt);
+			if (p.getClass().equals(Rain.class)) {
+				Rain pr = (Rain) p;
+				if (pr.y > ps.trackedObject.getHeight() + ps.trackedObject.getY()) {
+					pr.life = 0;
+					// on crée des drops
+					ps.addParticle(new Drop(ps, pr.x, ps.trackedObject.getHeight() + ps.trackedObject.getHeight()));
 				}
-				p.computeLife(1);
 			}
+			ps.addParticle(new Rain(ps));
 		}
 		return p;
 	}
@@ -124,8 +120,6 @@ public class RainBehavior implements ParticleBehavior {
 	}
 
 	/**
-	 * Initialize the default Drop velocity.
-	 * 
 	 * @param dropInitialVelocity
 	 *            the dropInitialVelocity to set
 	 */
@@ -134,23 +128,11 @@ public class RainBehavior implements ParticleBehavior {
 		return this;
 	}
 
-	/**
-	 * Set gravity value.
-	 * 
-	 * @param g
-	 * @return
-	 */
 	public RainBehavior setGravity(float g) {
 		this.mGravity = g;
 		return this;
 	}
 
-	/**
-	 * Set wind value.
-	 * 
-	 * @param w
-	 * @return
-	 */
 	public RainBehavior setWind(float w) {
 		this.mWind = w;
 		return this;

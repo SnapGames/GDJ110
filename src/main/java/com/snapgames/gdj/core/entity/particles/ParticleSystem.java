@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.snapgames.gdj.core.Game;
 import com.snapgames.gdj.core.entity.AbstractGameObject;
 import com.snapgames.gdj.core.entity.CameraObject;
+import com.snapgames.gdj.core.entity.GameObject;
 import com.snapgames.gdj.core.entity.particles.behaviors.ParticleBehavior;
 
 /**
@@ -39,7 +40,7 @@ public class ParticleSystem extends AbstractGameObject {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(ParticleSystem.class);
 
-	public int size = 0;
+	private static int nextFreeParticleIndex = 0;
 
 	/**
 	 * Particles linked to this system.
@@ -55,7 +56,7 @@ public class ParticleSystem extends AbstractGameObject {
 	/**
 	 * Camera to set Particle Focus.
 	 */
-	public CameraObject camera;
+	public GameObject trackedObject;
 
 	/**
 	 * Default constructor to create a new Particle System.
@@ -68,18 +69,26 @@ public class ParticleSystem extends AbstractGameObject {
 		logger.debug("create particle system with particle's life set to 100");
 	}
 
+	public void addParticle(Particle p) {
+
+		this.systemParticles.set(nextFreeParticleIndex, p);
+		for (int i = 0; i < systemParticles.size(); i++) {
+			Particle ip = systemParticles.get(i);
+			if (ip == null || ip.getLife() == 0) {
+				nextFreeParticleIndex = i;
+				break;
+			}
+		}
+	}
+
 	/**
 	 * Initialize all particles.
 	 */
 	public void initialize() {
 		for (int i = 0; i < systemParticles.size(); i++) {
 			Particle part = behavior.create(this);
-			if (part != null) {
-				part.initialize(this);
-				if (part.getLife() > 0) {
-					systemParticles.set(i, part);
-				}
-			}
+			part.initialize(this);
+			addParticle(part);
 		}
 	}
 
@@ -91,7 +100,6 @@ public class ParticleSystem extends AbstractGameObject {
 	 * @return
 	 */
 	public ParticleSystem setNbParticles(int size) {
-		this.size = size;
 		systemParticles = Arrays.asList(new Particle[size]);
 		initialize();
 		logger.debug("set particles number to {}", size);
@@ -133,10 +141,8 @@ public class ParticleSystem extends AbstractGameObject {
 	public void update(Game game, long dt) {
 		super.update(game, dt);
 		purgeParticles();
-		for (int i = 0; i < systemParticles.size(); i++) {
-			Particle particle = systemParticles.get(i);
-			particle = behavior.update(this, particle, dt);
-			systemParticles.set(i, particle);
+		for (Particle particle : systemParticles) {
+			behavior.update(this, particle, dt);
 		}
 		behavior.create(this);
 	}
@@ -160,69 +166,19 @@ public class ParticleSystem extends AbstractGameObject {
 		for (Particle particle : systemParticles) {
 			behavior.render(this, particle, g);
 		}
+
 	}
 
 	/**
-	 * define the camera the RainBehavior generator must be stick to.
+	 * define the trackedObject the RainBehavior generator must be stick to.
 	 * 
-	 * @param camera
+	 * @param trackedObject
 	 * @return
 	 */
-	public ParticleSystem setCamera(CameraObject camera) {
-		this.camera = camera;
-		logger.debug("Set camera to {}", camera.name);
+	public ParticleSystem setTrackedObject(GameObject object) {
+		this.trackedObject = object;
+		logger.debug("Set trackedObject to {}", object.getName());
 		return this;
-	}
-
-	/**
-	 * Add a prticle to the system.
-	 * 
-	 * @param p
-	 */
-	public void addParticle(Particle p) {
-		if (!systemParticles.isEmpty()) {
-			for (int i = 0; i < systemParticles.size(); i++) {
-				if (systemParticles.get(i) != null && systemParticles.get(i).getLife() <= 0) {
-					systemParticles.set(i, p);
-				}
-			}
-		}
-	}
-
-	public Particle getNextFreeParticle(Class<?> clazz) {
-		int cursor = 0;
-		Particle p = null;
-		if (!systemParticles.isEmpty()) {
-			while (cursor < systemParticles.size()) {
-				p = systemParticles.get(cursor);
-				if (p != null && p.getClass().equals(clazz) && systemParticles.get(cursor).getLife() <= 0) {
-					System.out.println(String.format("reuse particle %d", cursor));
-				} else {
-					try {
-						Constructor<?> c = clazz.getDeclaredConstructor(new Class[] { ParticleSystem.class });
-						p = (Particle) c.newInstance(this);
-						p.initialize(this);
-						systemParticles.set(cursor, p);
-						System.out.println(String.format("instanciate a new particle %s", clazz.getName()));
-					} catch (InstantiationException | IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (NoSuchMethodException e) {
-						e.printStackTrace();
-					} catch (SecurityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				cursor++;
-			}
-		}
-		return p;
 	}
 
 	/**

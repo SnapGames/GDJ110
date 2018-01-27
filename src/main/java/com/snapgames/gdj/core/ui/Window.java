@@ -41,6 +41,9 @@ public class Window extends JFrame {
 		// set game size.
 		game.setDimension(Game.WIDTH, Game.HEIGHT, Game.SCALE);
 
+		// Request for OpenGL hardware rendering activation
+		System.setProperty("sun.java2d.opengl", "True");
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setContentPane(game);
 		setLayout(new BorderLayout());

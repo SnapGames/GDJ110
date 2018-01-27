@@ -108,6 +108,7 @@ public class AbstractGameObject implements GameObject {
 	 * internal debug font.
 	 */
 	private Font debugFont;
+	private boolean fov;
 
 	/**
 	 * Default constructor for this AbstractGameObject.
@@ -266,6 +267,7 @@ public class AbstractGameObject implements GameObject {
 		debugInfo.clear();
 		debugInfo.add(name);
 		debugInfo.add(String.format("pos:(%4.0f,%4.0f)", x, y));
+		debugInfo.add(String.format("siz:(%4d,%4d)", width, height));
 		debugInfo.add(String.format("spd:(%4.2f,%4.2f)", dx, dy));
 		debugInfo.add(String.format("lyr,prio(:(%d,%d)", layer, priority));
 		debugInfo.add(String.format("action:(%s)", action));
@@ -484,6 +486,34 @@ public class AbstractGameObject implements GameObject {
 	 */
 	public AbstractGameObject setDebugFont(Font debugFont) {
 		this.debugFont = debugFont;
+		return this;
+	}
+
+	/**
+	 * If set to true, the entity will be processed and displayed only if in Field
+	 * Of View.
+	 * 
+	 * @param fov
+	 * @return
+	 */
+	public AbstractGameObject setFov(boolean fov) {
+		this.fov = fov;
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.snapgames.gdj.core.entity.GameObject#isFieldOfView()
+	 */
+	@Override
+	public boolean isFieldOfView() {
+		return fov;
+	}
+
+	public AbstractGameObject setSize(Rectangle bbox) {
+		this.width = bbox.width;
+		this.height = bbox.height;
 		return this;
 	}
 

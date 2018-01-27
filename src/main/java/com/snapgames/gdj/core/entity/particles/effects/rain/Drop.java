@@ -7,7 +7,7 @@
  * 
  * @year 2017
  */
-package com.snapgames.gdj.gdj110.entity.particles.effects.rain;
+package com.snapgames.gdj.core.entity.particles.effects.rain;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -43,6 +43,7 @@ public class Drop extends AbstractParticle {
 		this.color = Color.WHITE;
 		v0 = rb.dropInitialVelocity;
 		angle = (float) Math.toRadians(Math.round(Math.random() * 180)); // from 0 - 180 degrees
+		this.life=30;
 
 	}
 
@@ -57,7 +58,7 @@ public class Drop extends AbstractParticle {
 		t += time;
 		x = x0 + v0 * t * (float) Math.cos(angle);
 		y = y0 - (v0 * t * (float) Math.sin(angle) - rb.mGravity * t * t / 2);
-		if (y >= ps.camera.height + ps.camera.y) {
+		if (y >= ps.trackedObject.getHeight() + ps.trackedObject.getY()) {
 			life = 0;
 		}
 		life -= 1;

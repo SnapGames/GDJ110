@@ -97,7 +97,7 @@ public interface GameState {
 	void keyReleased(Game game, KeyEvent e);
 
 	/**
-	 * return the coirrent active camera object.
+	 * return the current active trackedObject object.
 	 * 
 	 * @return
 	 */
