@@ -50,8 +50,8 @@ public class RainBehavior implements ParticleBehavior {
 
 		Rain p = new Rain(ps);
 		// CREATE NEW RAIN
-		if (Math.random() < rainChance) {
-			p.life = 100;
+		if (Math.random() <= rainChance) {
+			p.life = Rain.initLife;
 		} else {
 			p.life = 0;
 		}
@@ -70,6 +70,15 @@ public class RainBehavior implements ParticleBehavior {
 	public Particle update(ParticleSystem ps, Particle p, float dt) {
 		if (p != null) {
 			p.update(ps, dt);
+			if (p.getClass().equals(Rain.class)) {
+				Rain pr = (Rain) p;
+				if (pr.y > ps.trackedObject.getHeight() + ps.trackedObject.getY()) {
+					pr.life = 0;
+					// on crée des drops
+					ps.addParticle(new Drop(ps, pr.x, ps.trackedObject.getHeight() + ps.trackedObject.getHeight()));
+				}
+			}
+			ps.addParticle(new Rain(ps));
 		}
 		return p;
 	}

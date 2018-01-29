@@ -62,12 +62,15 @@ public class PlayState extends AbstractGameState implements GameState {
 	// list of other entities to demonstrate AbstractGameObject usage.
 	private List<AbstractGameObject> entities = new CopyOnWriteArrayList<>();
 
+	
+	
+	
 	// Object moved by player
 	private TextObject scoreTextObject = null;
 
 	// Rain effect
 	ParticleSystem rain;
-	
+
 	int dEnergy = 1;
 	private GaugeObject energy;
 	int dMana = 1;
@@ -136,72 +139,53 @@ public class PlayState extends AbstractGameState implements GameState {
 		// prepare Game objects
 
 		// player (layer 1)
-		player = (Player) new Player("player")
-				.setPosition(Game.WIDTH / 2, Game.HEIGHT / 2)
-				.setSize(16, 16)
-				.setLayer(2)
-				.setPriority(1)
-				.setColor(Color.BLUE);
+		player = (Player) new Player("player").setPosition(Game.WIDTH / 2, Game.HEIGHT / 2).setSize(16, 16).setLayer(2)
+				.setPriority(1).setColor(Color.BLUE);
 
 		addObject(player);
 
-		// Add a camera.
-		CameraObject camera = new CameraObject("cam1")
-				.setTarget(player)
-				.setTweenFactor(0.1f);
+		// Add a trackedObject.
+		CameraObject camera = new CameraObject("cam1").setTarget(player).setTweenFactor(0.1f);
 		addCamera(camera);
-
-		// Add a Rain particle generator.
-		rain = (ParticleSystem) new ParticleSystem("rainyParticles")
-				.addBehavior(
-						new RainBehavior(0.20f)
-							.setRainChance(0.91f)
-							.setDropDiameter(2)
-							.setDropInitialVelocity(16)
-							.setGravity(-9.81f)
-							.setWind((float) (Math.random() * -1.0f) + 2.0f))
-				.setCamera(camera)
-				.setNbParticles(100)
-				.setLayer(1)
-				.setPriority(100);
-		addObject(rain);
-
-		// NPC
-		generateEnemies(10);
 
 		int marginLeft = (int) (Game.WIDTH * camera.getMargin() * 2);
 		int marginTop = (int) (Game.HEIGHT * camera.getMargin() * 2);
 		int marginRight = (int) (Game.WIDTH * (1 - camera.getMargin() * 2));
 		int marginBottom = (int) (Game.HEIGHT * (1 - camera.getMargin() * 2));
 
+		// Add a Rain particle generator.
+		rain = (ParticleSystem) new ParticleSystem("rainyParticles")
+				.addBehavior(
+					new RainBehavior(0.20f)
+						.setRainChance(0.1f)
+						.setDropDiameter(2)
+						.setDropInitialVelocity(16)
+						.setGravity(-0.981f * 3)
+						.setWind((float) (Math.random() * -0.5f) + 0.5f))
+					.setTrackedObject(player)
+					.setNbParticles(100)
+					.setLayer(3)
+					.setPriority(100)
+					.setFov(false)
+					.setSize(game.bbox);
+		addObject(rain);
+
+		// NPC
+		generateEnemies(10);
+
 		// HUD Definition (layer 1)
-		scoreTextObject = (TextObject) new TextObject("score")
-				.setText(String.format("%06d", score))
-				.setShadowColor(Color.BLACK)
-				.setShadowBold(2)
-				.setFont(scoreFont)
-				.setPosition(marginLeft, marginTop)
-				.setLayer(1)
-				.setPriority(1)
-				.setColor(Color.WHITE);
+		scoreTextObject = (TextObject) new TextObject("score").setText(String.format("%06d", score))
+				.setShadowColor(Color.BLACK).setShadowBold(2).setFont(scoreFont).setPosition(marginLeft, marginTop)
+				.setLayer(1).setPriority(1).setColor(Color.WHITE);
 		addObject(scoreTextObject);
 
-		energy = (GaugeObject) new GaugeObject("energy")
-				.setMinValue(0)
-				.setMaxValue(100)
-				.setValue(100)
-				.setPosition(marginRight - 50, marginTop)
-				.setSize(42, 6)
-				.setLayer(1)
-				.setPriority(1)
+		energy = (GaugeObject) new GaugeObject("energy").setMinValue(0).setMaxValue(100).setValue(100)
+				.setPosition(marginRight - 50, marginTop).setSize(42, 6).setLayer(1).setPriority(1)
 				.setColor(new Color(1.0f, 0.0f, 0.0f, 0.7f));
 
 		addObject(energy);
 
-		mana = (GaugeObject) new GaugeObject("mana")
-				.setMinValue(0)
-				.setMaxValue(100)
-				.setValue(100)
+		mana = (GaugeObject) new GaugeObject("mana").setMinValue(0).setMaxValue(100).setValue(100)
 				.setPosition(marginRight - 50, marginTop + 12).setSize(42, 6).setLayer(1).setPriority(1)
 				.setColor(new Color(0.0f, 0.0f, 1.0f, 0.9f));
 		;
@@ -306,7 +290,7 @@ public class PlayState extends AbstractGameState implements GameState {
 		// update all HUD attributes according to player object attriubtes
 		updateHUDAttributes();
 
-		// Update camera
+		// Update trackedObject
 		if (defaultCamera != null) {
 			defaultCamera.update(game, dt);
 		}
@@ -528,8 +512,9 @@ public class PlayState extends AbstractGameState implements GameState {
 				"[" + RenderHelper.showBoolean(game.isPause()) + "] P/PAUSE: pause the computation",
 				"[" + RenderHelper.showBoolean(isHelp) + "] H: display this help", "   CTRL+S: save a screenshot",
 				"   Q/ESCAPE: Escape the demo" };
+
 		// TODO Adapt text from i18n messages
-		String[] text2 = { "" };
+		// String[] text2 = { "" };
 
 		RenderHelper.display(g, x, y, debugFont, text);
 	}
@@ -604,7 +589,7 @@ public class PlayState extends AbstractGameState implements GameState {
 						.setVelocity(((float) Math.random() * 0.05f) - 0.02f, ((float) Math.random() * 0.05f) - 0.02f);
 
 			}
-			entities.add(entity);
+			addEntity(entity);
 			addObject(entity);
 		}
 
@@ -631,4 +616,9 @@ public class PlayState extends AbstractGameState implements GameState {
 		objects.removeAll(toBeDeleted);
 	}
 
+	private synchronized void addEntity(AbstractGameObject e) {
+		entities.add(e);
+	}
+	
+	
 }

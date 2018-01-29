@@ -53,19 +53,23 @@ public class Game extends JPanel {
 	public static final Logger logger = LoggerFactory.getLogger(Game.class);
 
 	/**
+	 * Game screen ratio.
+	 */
+	public static float RATIO = 16/9;
+	/**
 	 * Game screen width.
 	 */
-	public static int WIDTH = 320;
+	public static int WIDTH = 640;
 	/**
 	 * Game screen height.
 	 */
-	public static int HEIGHT = 240;
+	public static int HEIGHT = (int)(WIDTH/RATIO);
 	/**
 	 * game screen scaling
 	 */
 	public static float SCALE = 2.0f;
 
-	public static float SCREEN_FONT_RATIO = HEIGHT / 22;
+	public static float SCREEN_FONT_RATIO = HEIGHT / (44/RATIO);
 
 	/**
 	 * Number of frame per seconds
