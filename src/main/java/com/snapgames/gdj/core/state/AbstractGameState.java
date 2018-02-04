@@ -66,11 +66,11 @@ public abstract class AbstractGameState implements GameState {
 	 */
 	protected Layer[] layers = new Layer[3];
 	/**
-	 * Layers to be managed and see through camera view.
+	 * Layers to be managed and see through trackedObject view.
 	 */
 	protected List<Layer> layersWith = new CopyOnWriteArrayList<>();
 	/**
-	 * Layers to be managed outside any camera view.
+	 * Layers to be managed outside any trackedObject view.
 	 */
 	protected List<Layer> layersWithoutCamera = new CopyOnWriteArrayList<>();
 
@@ -90,12 +90,12 @@ public abstract class AbstractGameState implements GameState {
 	protected List<GameObject> objects = new CopyOnWriteArrayList<>();
 
 	/**
-	 * List Of camera
+	 * List Of trackedObject
 	 */
 	protected List<CameraObject> cameras = new CopyOnWriteArrayList<>();
 
 	/**
-	 * current active camera.
+	 * current active trackedObject.
 	 */
 	protected CameraObject defaultCamera = null;;
 
@@ -142,7 +142,7 @@ public abstract class AbstractGameState implements GameState {
 	 * 
 	 * @param object
 	 */
-	protected void addObject(AbstractGameObject object) {
+	protected synchronized void addObject(AbstractGameObject object) {
 		// add object to rendering list
 		objects.add(object);
 		objects.sort(new Comparator<GameObject>() {
@@ -159,7 +159,7 @@ public abstract class AbstractGameState implements GameState {
 		logger.debug("Add {} to the objects list", object.name);
 	}
 
-	private void addObjectToLayer(AbstractGameObject object) {
+	private synchronized void addObjectToLayer(AbstractGameObject object) {
 		if (object.layer >= 0 && layers[object.layer] != null) {
 
 			layers[object.layer].objects.add(object);
@@ -195,9 +195,9 @@ public abstract class AbstractGameState implements GameState {
 	}
 
 	/**
-	 * activate one of the camera.
+	 * activate one of the trackedObject.
 	 * 
-	 * @param camera
+	 * @param trackedObject
 	 */
 	public void setCamera(String cameraName) {
 		for (CameraObject c : cameras) {
@@ -206,7 +206,7 @@ public abstract class AbstractGameState implements GameState {
 				return;
 			}
 		}
-		logger.error("Unable to activate the camera, {} does not exist", cameraName);
+		logger.error("Unable to activate the trackedObject, {} does not exist", cameraName);
 	}
 
 	public void dispose(Game game) {
@@ -281,7 +281,8 @@ public abstract class AbstractGameState implements GameState {
 						if (defaultCamera != null && layer.moveWithCamera) {
 							g.translate(-defaultCamera.getX(), -defaultCamera.getY());
 						}
-						if (viewContainsObject(o, view) || defaultCamera == null || !layer.moveWithCamera) {
+						if (viewContainsObject(o, view) || defaultCamera == null || !layer.moveWithCamera
+								|| !o.isFieldOfView()) {
 							renderedObjectCount++;
 							o.draw(game, g);
 							if (game.isDebug(DebugLevel.DEBUG_FPS_BOX.ordinal()) || o.isDebugInfoDisplayed()) {
